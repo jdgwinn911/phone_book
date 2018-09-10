@@ -1,0 +1,42 @@
+<html>
+   <head>
+        <script src="/js/phone_book.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/phone_book.css">
+   </head>
+    <body>
+        <center>
+            <form method="post" action="contacts">
+                <h2>List of contacts</h2><br>
+                <table style="width:100%">
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Phone Number</th>
+                        <th>Street Address</th>
+                        <th>City</th>
+                        <th>State</th>
+                        <th>Zip</th>
+                    </tr>
+                     <%contacts.each do |v|%>
+                        <tr>
+                        <%v.each do |info|%>
+                            <td><%=info%></td>
+                        <%end%>
+                        </tr>
+                    <%end%>
+                </table><br>
+                <input type="submit" value="return">
+                <br><br>
+                <a href='/'>sign out</a>
+
+
+
+
+
+
+
+
+            </form>
+        </center>
+    </body>
+</html>
