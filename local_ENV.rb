@@ -1,6 +1,0 @@
-ENV['endpoint'] = 'phoneybook.cow73ajyokfq.us-east-2.rds.amazonaws.com'
-ENV['port'] = '3306'
-ENV['db'] = 'phoneybook'
-ENV['username'] = 'jdgwinn911'
-ENV['password'] = 'Motorbike1'
-ENV['salt'] = '8675309dapperdanman'
