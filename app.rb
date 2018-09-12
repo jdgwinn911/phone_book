@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'mysql2'
 require 'aws-sdk'
+require 'sanitize'
 require_relative 'phone_book.rb'
 # require_relative 'local_ENV.rb'
 load 'local_ENV.rb' if File.exist?('local_ENV.rb')
@@ -13,30 +14,21 @@ get '/' do
 end
 
 post '/phoney1' do
-  # fname = params[:fname]
-  # lname = params[:lname]
-  # address = params[:address]
-  # city = params[:city]
-  # state = params[:state]
-  # phone_number = params[:pnum]
-  # zip = params[:zip]
-  # password = params[:pw]
-
-
   username = params[:username]
   password = params[:password]
-  passwordconfig = params[:passwordconfig]
+  username = client.escape(username)
+  password = client.escape(password)
   arr = []
-  x = client.query("SELECT `id` FROM `user` WHERE username = '#{username}' AND password = '#{password}'")
+  x = client.query("SELECT `id` FROM `user` WHERE username = AES_ENCRYPT('#{username}', UNHEX(SHA2('#{ENV['salt']}',512))) AND password = AES_ENCRYPT('#{password}', UNHEX(SHA2('#{ENV['salt']}',512)))")
   x.each do |c|
     arr << c['id']
+    p c['id']
   end
   unless arr.length > 0
     session[:error] = "invalid username or password"
     redirect '/'
   end
   session[:user_id] = arr.join('')
-  # client.query("INSERT INTO contacts() VALUES()" )
   redirect '/phonedash'
 
 end 
@@ -47,10 +39,12 @@ get '/phoney2' do
 end
 
 post '/phoney2' do
-  mkusername = params[:mkusername]
-  mkpassword = params[:mkpassword]
+  mkusername = params[:mkusername] || ""
+  mkpassword = params[:mkpassword] || ""
+  mkusername = client.escape(mkusername)
+  mkpassword = client.escape(mkpassword)
 
-  client.query("INSERT INTO `user`(id, username, password) VALUES(UUID(), '#{mkusername}', '#{mkpassword}')")
+  client.query("INSERT INTO `user`(id, username, password) VALUES(UUID(), AES_ENCRYPT('#{mkusername}', UNHEX(SHA2('#{ENV['salt']}',512))), AES_ENCRYPT('#{mkpassword}', UNHEX(SHA2('#{ENV['salt']}',512))))")
   redirect '/'
 end
 
@@ -62,13 +56,21 @@ end
 post '/phonedash' do
 
   First_Name = params[:First_Name]
+  First_Name = client.escape(First_Name)
   Last_Name = params[:Last_Name]
+  Last_Name = client.escape(Last_Name)
   Street_Address = params[:Street_Address]
+  Street_Address = client.escape(Street_Address)
   City = params[:City]
+  City = client.escape(City)
   State = params[:State]
+  State = client.escape(State)
   Phone_Number = params[:Phone_Number]
+  Phone_Number = client.escape(Phone_Number)
   Zip = params[:Zip]
+  Zip = client.escape(Zip)
   id = session[:user_id]
+  id = client.escape(id)
   client.query("INSERT INTO `contacts`(First_Name, Last_Name, Phone_Number, Street_Address, City, State, Zip, owner) VALUES('#{First_Name}', '#{Last_Name}', '#{Phone_Number}', '#{Street_Address}', '#{City}', '#{ State}', '#{Zip}', '#{id}')")
   redirect '/contacts'
 end
@@ -79,13 +81,13 @@ get '/contacts' do
  v = client.query("SELECT * FROM `contacts` WHERE owner = '#{session[:user_id]}'")
  v.each do |z|
   aray =[]
-  aray << z['First_Name']
-  aray << z['Last_Name']
-  aray << z['Phone_Number']
-  aray << z['Street_Address']
-  aray << z['City']
-  aray << z['State']
-  aray << z['Zip']
+  aray << Sanitize.clean(z['First_Name'])
+  aray << Sanitize.clean(z['Last_Name'])
+  aray << Sanitize.clean(z['Phone_Number'])
+  aray << Sanitize.clean(z['Street_Address'])
+  aray << Sanitize.clean(z['City'])
+  aray << Sanitize.clean(z['State'])
+  aray << Sanitize.clean(z['Zip'])
   contacts << aray
  end
   erb :contacts_page, locals:{contacts: contacts || []}
