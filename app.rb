@@ -2,7 +2,6 @@ require 'sinatra'
 require 'mysql2'
 require 'sanitize'
 require_relative 'phone_book.rb'
-require_relative 'local_ENV.rb'
 load 'local_ENV.rb' if File.exist?('local_ENV.rb')
 enable :sessions
 
