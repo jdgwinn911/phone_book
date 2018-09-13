@@ -1,6 +1,5 @@
 require 'sinatra'
 require 'mysql2'
-require 'aws-sdk'
 require 'sanitize'
 require_relative 'phone_book.rb'
 # require_relative 'local_ENV.rb'
