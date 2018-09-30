@@ -5,41 +5,92 @@
    </head>
     <body background="images/purdy.jpeg" align="middle">
         <center>
-            <form method="post" action="contacts">
+            <form method="post" action="contacts" id="delbutt">
             <div class="popo">
                 <h2>List of contacts</h2><br>
-                <table  align="center">
+                <input type="text" id="searchinput" onkeyup="searchfunk()" placeholder="Search Names.." title="Type in a name"><br><br>
+                <table style="width:100%" id="table">
+                <div class="table" id="contacts_table">
+                <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Street</th>
+                 <th>City</th>
+                 <th>State</th>
+                <th>Zip</th>
+                <th>Phone Number</th>
+                </tr>
+                </div>
+                <%contacts.each_with_index do |v, i|%>
                     <tr>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Phone Number</th>
-                        <th>Street Address</th>
-                        <th>City</th>
-                        <th>State</th>
-                        <th>Zip</th>
-                    </tr>
-                     <%contacts.each do |v|%>
-                        <tr>
                         <%v.each do |info|%>
                             <td><%=info%></td>
                         <%end%>
-                        </tr>
-                    <%end%>
-                </table><br>
-                <input type="submit" value="return"><br>
+                        <td>
+                            <button type="button" id="myBtn" class="btn_class" value="<%=v[0]%>, <%=v[1]%>, <%=v[2]%>, <%=v[3]%>, <%=v[4]%>, <%=v[5]%>, <%=v[6]%>, <%=v[7]%> " name="myBtn" data-session="<%=session[:user_id]%>" onclick="modalThings(this)">Edit</button>
+                        </td>
+                    </tr>
+                <%end%>
+
+                <a href='/phonedash'>Add contact</a>
                 <br><br>
-                <a href='/'>sign out</a>
-            </div>
-
-
-
-
-
-
-
-
-
+                <a href='/'>sign out</a><br><br>
+                </div>
+               </table>
+                <div id="myModal" class="modal">
+                <div class="modal-content" id="add_content_value">
+                <input  type="text" placeholder="First_Name"  name="fname" required>
+                <input type="text" placeholder="Last_Name" required>
+                <input type="text" placeholder="Street_Address" required>
+                <input type="text" placeholder="City" required>
+                <input type="text" placeholder="State" required>
+                <input type="text" placeholder="Zip" required>
+                <input type="text" placeholder="Phone_Number" required>
+                <input type="submit" value="update" onclick="uupdate()" id="uupdate">
+                <input type="submit" value="delete" onclick="deeleet()" id="deeleet">
+                 <span class="close">&times;</span>
+                </div>
+                </div>
+                <input type="hidden" name="grabme" value="contact_id">
             </form>
         </center>
     </body>
 </html>
+<script>
+//  making modal, then making variables to split the string into array and add the params to modal
+ function modalThings(contact_id){
+    var modal = document.getElementById('myModal');
+    var buttons = document.getElementsByName('myBtn');
+    var span = document.getElementsByClassName("close")[0];
+    var x = contact_id.value;
+    var y = document.getElementById("add_content_value")
+    x = x.split(',');
+    console.log(x);
+
+    // this for loop is for sorting the children of the div into the input feilds on modal 
+    for (var i = 0; i < y.children.length; i++){
+        if (y.children[i].tagName == "INPUT"){
+            if (y.children[i].type == "text"){
+                y.children[i].value = x[i];
+            }
+        }
+    }
+   
+//    this is for making said modal pop-up 
+    modal.style.display = "block";
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+    window.onclick = function(event){
+      if (event.target == modal) {
+          modal.style.display = "none";
+          }
+        }
+   }
+   function deeleet(){
+       var z = getElementById("delbutt")
+       z.action = "/delete";
+       z.submit();
+   }
+</script>

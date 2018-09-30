@@ -17,7 +17,7 @@ post '/phoney1' do
   username = client.escape(username)
   password = client.escape(password)
   arr = []
-  x = client.query("SELECT `id` FROM `user` WHERE username = AES_ENCRYPT('#{username}', UNHEX(SHA2('#{ENV['salt']}',512))) AND password = AES_ENCRYPT('#{password}', UNHEX(SHA2('#{ENV['salt']}',512)))")
+  x = client.query("SELECT `id` FROM `user` WHERE username = '#{username}'  AND password = AES_ENCRYPT('#{password}', UNHEX(SHA2('#{ENV['salt']}',512)))")
   x.each do |c|
     arr << c['id']
     p c['id']
@@ -27,7 +27,7 @@ post '/phoney1' do
     redirect '/'
   end
   session[:user_id] = arr.join('')
-  redirect '/phonedash'
+  redirect '/contacts'
 
 end 
 
@@ -42,7 +42,7 @@ post '/phoney2' do
   mkusername = client.escape(mkusername)
   mkpassword = client.escape(mkpassword)
 
-  client.query("INSERT INTO `user`(id, username, password) VALUES(UUID(), AES_ENCRYPT('#{mkusername}', UNHEX(SHA2('#{ENV['salt']}',512))), AES_ENCRYPT('#{mkpassword}', UNHEX(SHA2('#{ENV['salt']}',512))))")
+  client.query("INSERT INTO `user`(id, username, password) VALUES(UUID(),'#{mkusername}', AES_ENCRYPT('#{mkpassword}', UNHEX(SHA2('#{ENV['salt']}',512))))")
   redirect '/'
 end
 
@@ -57,8 +57,8 @@ post '/phonedash' do
   First_Name = client.escape(First_Name)
   Last_Name = params[:Last_Name]
   Last_Name = client.escape(Last_Name)
-  Street_Address = params[:Street_Address]
-  Street_Address = client.escape(Street_Address)
+ Street_Address = params[:Street_Address]
+ Street_Address = client.escape(Street_Address)
   City = params[:City]
   City = client.escape(City)
   State = params[:State]
@@ -69,7 +69,7 @@ post '/phonedash' do
   Zip = client.escape(Zip)
   id = session[:user_id]
   id = client.escape(id)
-  client.query("INSERT INTO `contacts`(First_Name, Last_Name, Phone_Number, Street_Address, City, State, Zip, owner) VALUES('#{First_Name}', '#{Last_Name}', '#{Phone_Number}', '#{Street_Address}', '#{City}', '#{ State}', '#{Zip}', '#{id}')")
+  client.query("INSERT INTO `contacts`(First_Name, Last_Name, Phone_Number, Street_Address, City, State, Zip, owner) VALUES('#{First_Name}', '#{Last_Name}', '#{Phone_Number}', '#{Street_Address}', '#{City}', '#{State}', '#{Zip}', '#{id}')")
   redirect '/contacts'
 end
 
@@ -77,7 +77,9 @@ get '/contacts' do
   contacts = []
 
  v = client.query("SELECT * FROM `contacts` WHERE owner = '#{session[:user_id]}'")
+ contact_id = []
  v.each do |z|
+  contact_id << z["id"]
   aray =[]
   aray << Sanitize.clean(z['First_Name'])
   aray << Sanitize.clean(z['Last_Name'])
@@ -88,10 +90,14 @@ get '/contacts' do
   aray << Sanitize.clean(z['Zip'])
   contacts << aray
  end
-  erb :contacts_page, locals:{contacts: contacts || []}
+  erb :contacts_page, locals:{contacts: contacts || [],contact_id: contact_id}
 
 end
 
 post '/contacts' do
-  redirect '/phonedash'
+  redirect '/contacts'
+end
+
+post '/delete' do
+  redirect '/contacts'
 end
