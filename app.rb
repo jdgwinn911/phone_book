@@ -41,6 +41,12 @@ post '/phoney2' do
   mkpassword = params[:mkpassword] || ""
   mkusername = client.escape(mkusername)
   mkpassword = client.escape(mkpassword)
+  m = client.query("SELECT `username` FROM user")
+  m.each do |v|
+  if v.has_value?(mkusername)
+      redirect '/phoney2'
+  end
+end
 
   client.query("INSERT INTO `user`(id, username, password) VALUES(UUID(),'#{mkusername}', AES_ENCRYPT('#{mkpassword}', UNHEX(SHA2('#{ENV['salt']}',512))))")
   redirect '/'
