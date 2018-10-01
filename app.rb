@@ -102,3 +102,27 @@ post '/delete' do
   client.query("DELETE FROM `contacts` WHERE `id` = '#{contact_id}'")
   redirect '/contacts'
 end
+
+post '/uupdate' do 
+  First_Name = params[:First_Name]
+  First_Name = client.escape(First_Name)
+  Last_Name = params[:Last_Name]
+  Last_Name = client.escape(Last_Name)
+ Street_Address = params[:Street_Address]
+ Street_Address = client.escape(Street_Address)
+  City = params[:City]
+  City = client.escape(City)
+  State = params[:State]
+  State = client.escape(State)
+  Phone_Number = params[:Phone_Number]
+  Phone_Number = client.escape(Phone_Number)
+  Zip = params[:Zip]
+  Zip = client.escape(Zip)
+  id = session[:user_id]
+  id = client.escape(id)
+  contact_id = params[:contact_id]
+  client.query("UPDATE `contacts` SET First_Name ='#{First_Name}', Last_Name ='#{Last_Name}', Phone_Number ='#{Phone_Number}', Street_Address ='#{Street_Address}', City ='#{City}', State ='#{State}', Zip ='#{Zip}' WHERE `id` = '#{contact_id}';")
+
+  redirect '/contacts'
+end
+
