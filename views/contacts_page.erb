@@ -46,12 +46,12 @@
                 <input type="text" placeholder="State" required>
                 <input type="text" placeholder="Zip" required>
                 <input type="text" placeholder="Phone_Number" required>
+                <input type="hidden" name="contact_id">
                 <input type="submit" value="update" onclick="uupdate()" id="uupdate">
-                <input type="submit" value="delete" onclick="deeleet()" id="deeleet">
+                <input type="submit" value="delete" onclick="deeleet()" id="delbutt">
                  <span class="close">&times;</span>
                 </div>
                 </div>
-                <input type="hidden" name="grabme" value="contact_id">
             </form>
         </center>
     </body>
@@ -72,6 +72,8 @@
         if (y.children[i].tagName == "INPUT"){
             if (y.children[i].type == "text"){
                 y.children[i].value = x[i];
+            }else if (y.children[i].type == "hidden"){
+                y.children[i].value = x[i];
             }
         }
     }
@@ -89,7 +91,7 @@
         }
    }
    function deeleet(){
-       var z = getElementById("delbutt")
+       var z = document.getElementById("delbutt");
        z.action = "/delete";
        z.submit();
    }

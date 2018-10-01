@@ -77,9 +77,7 @@ get '/contacts' do
   contacts = []
 
  v = client.query("SELECT * FROM `contacts` WHERE owner = '#{session[:user_id]}'")
- contact_id = []
  v.each do |z|
-  contact_id << z["id"]
   aray =[]
   aray << Sanitize.clean(z['First_Name'])
   aray << Sanitize.clean(z['Last_Name'])
@@ -88,9 +86,10 @@ get '/contacts' do
   aray << Sanitize.clean(z['City'])
   aray << Sanitize.clean(z['State'])
   aray << Sanitize.clean(z['Zip'])
+  aray << z["id"]
   contacts << aray
  end
-  erb :contacts_page, locals:{contacts: contacts || [],contact_id: contact_id}
+  erb :contacts_page, locals:{contacts: contacts || []}
 
 end
 
@@ -99,5 +98,7 @@ post '/contacts' do
 end
 
 post '/delete' do
+  contact_id = params[:contact_id]
+  client.query("DELETE FROM `contacts` WHERE `id` = '#{contact_id}'")
   redirect '/contacts'
 end
