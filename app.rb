@@ -5,7 +5,7 @@ require_relative 'phone_book.rb'
 load 'local_ENV.rb' if File.exist?('local_ENV.rb')
 enable :sessions
 
-client = Mysql2::Client.new(:host => ENV['endpoint'], :username => ENV['username'], :password => ENV['password'], :database => ENV['db'])
+client = Mysql2::Client.new(:host => ENV['endpoint'], :username => ENV['username'], :password => ENV['password'], :database => ENV['db'], :port => ENV['port'])
 #results = client.query("SELECT * FROM `phoneybook`")
 get '/' do
   erb :phone_book
@@ -47,6 +47,7 @@ post '/phoney2' do
       redirect '/phoney2'
   end
 end
+m.(/[^a-zA-Z0-9\-]/,"")
 
   client.query("INSERT INTO `user`(id, username, password) VALUES(UUID(),'#{mkusername}', AES_ENCRYPT('#{mkpassword}', UNHEX(SHA2('#{ENV['salt']}',512))))")
   redirect '/'
@@ -63,8 +64,8 @@ post '/phonedash' do
   First_Name = client.escape(First_Name)
   Last_Name = params[:Last_Name]
   Last_Name = client.escape(Last_Name)
- Street_Address = params[:Street_Address]
- Street_Address = client.escape(Street_Address)
+  Street_Address = params[:Street_Address]
+  Street_Address = client.escape(Street_Address)
   City = params[:City]
   City = client.escape(City)
   State = params[:State]
@@ -74,7 +75,7 @@ post '/phonedash' do
   Zip = params[:Zip]
   Zip = client.escape(Zip)
   id = session[:user_id]
-  id = client.escape(id)
+
   client.query("INSERT INTO `contacts`(First_Name, Last_Name, Phone_Number, Street_Address, City, State, Zip, owner) VALUES('#{First_Name}', '#{Last_Name}', '#{Phone_Number}', '#{Street_Address}', '#{City}', '#{State}', '#{Zip}', '#{id}')")
   redirect '/contacts'
 end
@@ -125,7 +126,6 @@ post '/uupdate' do
   Zip = params[:Zip]
   Zip = client.escape(Zip)
   id = session[:user_id]
-  id = client.escape(id)
   contact_id = params[:contact_id]
   client.query("UPDATE `contacts` SET First_Name ='#{First_Name}', Last_Name ='#{Last_Name}', Phone_Number ='#{Phone_Number}', Street_Address ='#{Street_Address}', City ='#{City}', State ='#{State}', Zip ='#{Zip}' WHERE `id` = '#{contact_id}';")
 
