@@ -25,6 +25,7 @@ post '/phoney1' do
   end
   unless arr.length > 0
     session[:error] = "invalid username or password"
+    p session[:error]
     redirect '/'
   end
   session[:user_id] = arr.join('')
