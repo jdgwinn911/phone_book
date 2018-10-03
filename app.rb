@@ -11,8 +11,10 @@ get '/' do
 end
 
 post '/phoney1' do
-  username = params[:username]
-  password = params[:password]
+  username = params[:username] || ""
+  # username.gsub!(/[!@$%&"]/,'')
+  password = params[:password] || ""
+  # password.gsub!(/[!@%&$"]/,'')
   username = client.escape(username)
   password = client.escape(password)
   arr = []
@@ -58,7 +60,7 @@ end
 
 post '/phonedash' do
 
-  First_Name = params[:First_Name]
+  First_Name = params[:First_Name].tr("\"", "")
   First_Name = client.escape(First_Name)
   Last_Name = params[:Last_Name]
   Last_Name = client.escape(Last_Name)
@@ -109,8 +111,11 @@ post '/delete' do
 end
 
 post '/uupdate' do 
+  puts "params are #{params}"
   First_Name = params[:First_Name]
+  puts "before .escape #{First_Name}"
   First_Name = client.escape(First_Name)
+  puts "first name is #{First_Name}"
   Last_Name = params[:Last_Name]
   Last_Name = client.escape(Last_Name)
  Street_Address = params[:Street_Address]
@@ -125,7 +130,8 @@ post '/uupdate' do
   Zip = client.escape(Zip)
   id = session[:user_id]
   contact_id = params[:contact_id]
-  client.query("UPDATE `contacts` SET First_Name ='#{First_Name}', Last_Name ='#{Last_Name}', Phone_Number ='#{Phone_Number}', Street_Address ='#{Street_Address}', City ='#{City}', State ='#{State}', Zip ='#{Zip}' WHERE `id` = '#{contact_id}';")
+  
+    client.query("UPDATE `contacts` SET First_Name ='#{First_Name}', Last_Name ='#{Last_Name}', Phone_Number ='#{Phone_Number}', Street_Address ='#{Street_Address}', City ='#{City}', State ='#{State}', Zip ='#{Zip}' WHERE `id` = '#{contact_id}';")
 
   redirect '/contacts'
 end
