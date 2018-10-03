@@ -1,7 +1,6 @@
 require 'sinatra'
 require 'mysql2'
 require 'sanitize'
-require_relative 'phone_book.rb'
 load 'local_ENV.rb' if File.exist?('local_ENV.rb')
 enable :sessions
 
@@ -47,7 +46,6 @@ post '/phoney2' do
       redirect '/phoney2'
   end
 end
-m.(/[^a-zA-Z0-9\-]/,"")
 
   client.query("INSERT INTO `user`(id, username, password) VALUES(UUID(),'#{mkusername}', AES_ENCRYPT('#{mkpassword}', UNHEX(SHA2('#{ENV['salt']}',512))))")
   redirect '/'
