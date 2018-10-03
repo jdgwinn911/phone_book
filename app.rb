@@ -62,17 +62,17 @@ post '/phonedash' do
 
   First_Name = params[:First_Name].tr("\"", "")
   First_Name = client.escape(First_Name)
-  Last_Name = params[:Last_Name]
+  Last_Name = params[:Last_Name].tr("\"", "")
   Last_Name = client.escape(Last_Name)
-  Street_Address = params[:Street_Address]
+  Street_Address = params[:Street_Address].tr("\"", "")
   Street_Address = client.escape(Street_Address)
-  City = params[:City]
+  City = params[:City].tr("\"", "")
   City = client.escape(City)
-  State = params[:State]
+  State = params[:State].tr("\"", "")
   State = client.escape(State)
-  Phone_Number = params[:Phone_Number]
+  Phone_Number = params[:Phone_Number].tr("\"", "")
   Phone_Number = client.escape(Phone_Number)
-  Zip = params[:Zip]
+  Zip = params[:Zip].tr("\"", "")
   Zip = client.escape(Zip)
   id = session[:user_id]
 
@@ -112,21 +112,21 @@ end
 
 post '/uupdate' do 
   puts "params are #{params}"
-  First_Name = params[:First_Name]
+  First_Name = params[:First_Name].tr("\"", "")
   puts "before .escape #{First_Name}"
   First_Name = client.escape(First_Name)
   puts "first name is #{First_Name}"
-  Last_Name = params[:Last_Name]
+  Last_Name = params[:Last_Name].tr("\"", "")
   Last_Name = client.escape(Last_Name)
- Street_Address = params[:Street_Address]
+ Street_Address = params[:Street_Address].tr("\"", "")
  Street_Address = client.escape(Street_Address)
-  City = params[:City]
+  City = params[:City].tr("\"", "")
   City = client.escape(City)
-  State = params[:State]
+  State = params[:State].tr("\"", "")
   State = client.escape(State)
-  Phone_Number = params[:Phone_Number]
+  Phone_Number = params[:Phone_Number].tr("\"", "")
   Phone_Number = client.escape(Phone_Number)
-  Zip = params[:Zip]
+  Zip = params[:Zip].tr("\"", "")
   Zip = client.escape(Zip)
   id = session[:user_id]
   contact_id = params[:contact_id]
