@@ -14,6 +14,11 @@ function searchfunk() {
         }
       }       
     }
-  }
+}
 
 
+function disableButton(){
+    var dash = document.getElementById("dash");
+ document.getElementById("disable").disabled = "disabled";
+    dash.submit();
+}
