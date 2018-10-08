@@ -7,7 +7,8 @@ enable :sessions
 client = Mysql2::Client.new(:host => ENV['endpoint'], :username => ENV['username'], :password => ENV['password'], :database => ENV['db'], :port => ENV['port'])
 #results = client.query("SELECT * FROM `phoneybook`")
 get '/' do
-  erb :phone_book
+  error = session[:error] || ""
+  erb :phone_book, locals: {error: error}
 end
 
 post '/phoney1' do
@@ -15,6 +16,7 @@ post '/phoney1' do
   # username.gsub!(/[!@$%&"]/,'')
   password = params[:password] || ""
   # password.gsub!(/[!@%&$"]/,'')
+  error = session[:error] || ""
   username = client.escape(username)
   password = client.escape(password)
   arr = []
@@ -25,8 +27,9 @@ post '/phoney1' do
   end
   unless arr.length > 0
     session[:error] = "invalid username or password"
-    p session[:error]
     redirect '/'
+  else arr.length <= 0
+   session[:error] = ""
   end
   session[:user_id] = arr.join('')
   redirect '/contacts'

@@ -5,11 +5,14 @@
    </head>
     <center>
     <body background="images/purdy.jpeg" align="middle">
-        <form method="post" action="phoney1">
+        <form method="post" action="phoney1" name="myform">
+        <div class="error">
+            <span><%=error%></span>
+        </div>
             <div class="login">
                 <font color="pink"><h2>Please log in</h2></font>
-                <input type="text" placeholder="username" id="username" name="username" required><br><br>
-                <input type="password" placeholder="password" id="password" name="password" required><br><br>
+                <input type="text" placeholder="username" id="username"  name="username" required><br><br>
+                <input type="password" placeholder="password" id="password" name="password"  required><br><br>
                 <input type="submit" value="log in" name="login">
             </div><br>
             <div class="classy">
