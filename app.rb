@@ -122,14 +122,14 @@ post '/uupdate' do
   puts "first name is #{First_Name}"
   Last_Name = params[:Last_Name].tr("\"", "")
   Last_Name = client.escape(Last_Name)
+  Phone_Number = params[:Phone_Number].tr("\"", "")
+  Phone_Number = client.escape(Phone_Number)
  Street_Address = params[:Street_Address].tr("\"", "")
  Street_Address = client.escape(Street_Address)
   City = params[:City].tr("\"", "")
   City = client.escape(City)
   State = params[:State].tr("\"", "")
   State = client.escape(State)
-  Phone_Number = params[:Phone_Number].tr("\"", "")
-  Phone_Number = client.escape(Phone_Number)
   Zip = params[:Zip].tr("\"", "")
   Zip = client.escape(Zip)
   id = session[:user_id]
