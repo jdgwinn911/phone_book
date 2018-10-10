@@ -38,7 +38,8 @@ end
 
 
 get '/phoney2' do
-  erb :phone_book1
+  error1 = session[:error1] || ""
+  erb :phone_book1, locals: {error1: error1}
 end
 
 post '/phoney2' do
@@ -49,7 +50,10 @@ post '/phoney2' do
   m = client.query("SELECT `username` FROM user")
   m.each do |v|
   if v.has_value?(mkusername)
+    session[:error1] = "you can't use the same username twice!"
       redirect '/phoney2'
+  else 
+    session[:error1] = ""
   end
 end
 
