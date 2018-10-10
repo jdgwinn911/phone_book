@@ -58,6 +58,16 @@ a:hover, a:active {
     box-shadow: -8px -8px 9px;
     display: grid;
 }
+input#disable {
+    margin-bottom: 15px;
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    background-color: #f44336;
+    color: #aaa;
+    
+}
 
 .popo {
     background-color:#45e6f1af;
